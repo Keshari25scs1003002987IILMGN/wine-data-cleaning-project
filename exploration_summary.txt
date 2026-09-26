@@ -1,0 +1,55 @@
+SHAPE: (188, 14)
+
+DTYPES:
+alcohol                         float64
+malic_acid                      float64
+ash                             float64
+alcalinity_of_ash               float64
+magnesium                       float64
+total_phenols                   float64
+flavanoids                      float64
+nonflavanoid_phenols            float64
+proanthocyanins                 float64
+color_intensity                 float64
+hue                             float64
+od280/od315_of_diluted_wines    float64
+proline                         float64
+wine_class                          str
+dtype: object
+
+MISSING VALUES PER COLUMN:
+alcohol                         18
+malic_acid                       7
+ash                             10
+alcalinity_of_ash               13
+magnesium                        5
+total_phenols                    9
+flavanoids                      13
+nonflavanoid_phenols             8
+proanthocyanins                 13
+color_intensity                  7
+hue                             13
+od280/od315_of_diluted_wines    16
+proline                          5
+wine_class                       0
+dtype: int64
+
+DUPLICATE ROWS: 9
+
+DESCRIBE:
+                              count        mean  ...       75%      max
+alcohol                       170.0   13.009529  ...    13.705    14.83
+malic_acid                    181.0    2.355691  ...     3.170     5.80
+ash                           178.0    2.368989  ...     2.560     3.23
+alcalinity_of_ash             175.0   19.542857  ...    21.500    30.00
+magnesium                     183.0  111.114754  ...   108.000   810.00
+total_phenols                 179.0    2.297318  ...     2.800     3.85
+flavanoids                    175.0    2.018057  ...     2.895     5.08
+nonflavanoid_phenols          180.0    0.360833  ...     0.430     0.66
+proanthocyanins               175.0    1.590514  ...     1.955     3.58
+color_intensity               181.0    5.107127  ...     6.200    13.00
+hue                           175.0    0.955463  ...     1.120     1.71
+od280/od315_of_diluted_wines  172.0    2.601395  ...     3.170     4.00
+proline                       183.0  844.398907  ...  1000.000  6720.00
+
+[13 rows x 8 columns]
