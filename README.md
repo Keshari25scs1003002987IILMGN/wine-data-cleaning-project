@@ -1,50 +1,46 @@
-# Data Acquisition, Cleaning & Preprocessing — Wine Recognition Dataset
+# Exploratory Data Analysis & Visualization — Wine Recognition Dataset
 
-**YuvaIntern — Virtual Data Science with Python Trainee — Week 1 Task**
+**YuvaIntern — Virtual Data Science with Python Trainee — Week 2 Task**
 
 ## Objective
-Acquire a publicly available dataset, perform data cleaning, and preprocess it using Python, while documenting every decision made.
+Perform exploratory data analysis (EDA) and visualization on a public dataset, extracting meaningful insights using Pandas, Matplotlib and NumPy, building on the cleaned dataset from Week 1.
 
 ## Dataset
-- **Source:** [UCI Machine Learning Repository — Wine Recognition Dataset](https://archive.ics.uci.edu/dataset/109/wine), accessed locally via `sklearn.datasets.load_wine()`.
-- **Description:** Results of a chemical analysis of wines grown in the same region of Italy, derived from three different cultivars (classes). 13 numeric chemical features (alcohol, malic acid, ash, magnesium, flavanoids, proline, etc.) plus a class label.
-- **Note:** The original UCI dataset is already clean, so to genuinely demonstrate a data-cleaning workflow this project deterministically injects missing values, duplicate rows and outliers (fixed random seed = 42) before cleaning them back out. This is fully documented and reproducible — see `src/data_cleaning_pipeline.py`, Step 2.
+- **Source:** Cleaned output of the Week 1 task — the UCI Wine Recognition Dataset (`00_input_cleaned_wine.csv`), 179 samples across 3 cultivars (`class_0`, `class_1`, `class_2`), 13 chemical features.
 
 ## Project Structure
 ```
 ├── src/
-│   └── data_cleaning_pipeline.py   # Full pipeline: acquire → explore → clean → preprocess
+│   └── eda_visualization_pipeline.py   # Full EDA + visualization pipeline
 ├── data/
-│   ├── 00_raw_original_uci_wine.csv
-│   ├── 01_messy_wine_dataset.csv
-│   ├── 02_cleaned_preprocessed_wine.csv
-│   ├── exploration_summary.txt
-│   └── outlier_report.txt
-├── images/                         # Diagnostic plots used in the report
+│   ├── 00_input_cleaned_wine.csv               # Input (from Week 1)
+│   ├── 01_eda_dataset_with_derived_feature.csv # Output with derived feature
+│   ├── summary_statistics.csv
+│   ├── class_distribution.csv
+│   ├── class_wise_mean_aggregation.csv
+│   └── eda_text_summary.txt
+├── images/                             # All visualizations used in the report
 ├── requirements.txt
 └── README.md
 ```
 
 ## Steps Performed
-1. **Data Acquisition** — loaded the Wine Recognition dataset via scikit-learn.
-2. **Initial Exploration** — shape, dtypes, missing-value counts, summary statistics.
-3. **Duplicate Handling** — identified and removed exact duplicate rows.
-4. **Missing Value Handling** — imputed numeric columns using the median, computed per wine class to preserve class-specific distributions.
-5. **Outlier Handling** — detected outliers using the IQR method (1.5×IQR rule) and capped (winsorized) them rather than dropping rows, to preserve sample size.
-6. **Preprocessing** — standardized numeric features with `StandardScaler` for downstream modeling readiness.
-7. **Output** — saved the cleaned + scaled dataset and all diagnostic plots.
+1. **Initial Analysis** — summary statistics (`describe()`), class distribution check.
+2. **Transformations/Aggregations** — group-by mean per class; derived `phenol_flavanoid_ratio` feature.
+3. **Visualizations** — class distribution bar chart, feature histograms, boxplots by class, correlation heatmap, scatter plot of the strongest correlated pair, and a manual pairwise scatter/histogram grid.
+4. **Interpretation** — patterns and class-separating features documented in the report.
 
 ## How to Run
 ```bash
 pip install -r requirements.txt
-python src/data_cleaning_pipeline.py
+python src/eda_visualization_pipeline.py
 ```
 
 ## Key Findings
-- 137 missing cells and 9 duplicate rows were introduced/detected across 178→188 rows.
-- Median imputation grouped by class was chosen over global-mean imputation because the three wine cultivars have distinct chemical profiles (e.g. very different average `magnesium` and `proline`), so a single global fill value would blur class separability.
-- IQR-based capping was chosen over row deletion so no observations were lost — important given the dataset's already-small size (178 rows).
-- Post-cleaning, all missing values were resolved (0 remaining) and extreme outlier values in `magnesium` and `proline` were brought within 1.5×IQR bounds.
+- Strongest correlation: `total_phenols` vs `flavanoids` (r = 0.83).
+- `class_2` wines: lowest flavanoids/phenols, highest color intensity.
+- `class_0` wines: highest proline and alcohol — the most full-bodied cultivar.
+- No extreme anomalies remain, confirming the Week 1 cleaning pipeline was effective.
 
 ## Author
 Keshari — YuvaIntern Virtual Data Science with Python Trainee Program

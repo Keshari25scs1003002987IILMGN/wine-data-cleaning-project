@@ -1,0 +1,35 @@
+SHAPE: (179, 28)
+
+CLASS DISTRIBUTION:
+wine_class
+class_1    71
+class_0    60
+class_2    48
+Name: count, dtype: int64
+
+SUMMARY STATISTICS:
+                              count        mean  ...       75%        max
+alcohol                       179.0   13.002682  ...    13.710    14.8300
+malic_acid                    179.0    2.316355  ...     3.110     5.3825
+ash                           179.0    2.366089  ...     2.535     3.0000
+alcalinity_of_ash             179.0   19.532402  ...    21.500    27.9500
+magnesium                     179.0   99.695531  ...   107.000   135.5000
+total_phenols                 179.0    2.291564  ...     2.800     3.8500
+flavanoids                    179.0    2.029274  ...     2.905     5.0800
+nonflavanoid_phenols          179.0    0.363520  ...     0.435     0.6600
+proanthocyanins               179.0    1.597737  ...     1.935     2.9625
+color_intensity               179.0    5.090251  ...     6.275    10.8425
+hue                           179.0    0.953832  ...     1.105     1.6000
+od280/od315_of_diluted_wines  179.0    2.592458  ...     3.110     4.0000
+proline                       179.0  761.574022  ...  1017.500  1793.7500
+
+[13 rows x 8 columns]
+
+CLASS-WISE MEAN AGGREGATION:
+            alcohol  malic_acid  ...  od280/od315_of_diluted_wines  proline
+wine_class                       ...                                       
+class_0       13.74        2.00  ...                          3.10  1134.24
+class_1       12.29        1.90  ...                          2.77   535.67
+class_2       13.13        3.33  ...                          1.69   629.90
+
+[3 rows x 13 columns]
