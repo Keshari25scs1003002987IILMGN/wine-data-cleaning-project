@@ -1,59 +1,71 @@
-# Deep Learning Application in Data Science — Week 5 Task
+# Week 6 Capstone — Integrative Data Science Project
 
-Handwritten digit classification using a Convolutional Neural Network (CNN),
-built as part of the *Virtual Data Science with Python* internship (YuvaIntern).
+**Predicting wine cultivar from chemical analysis, and testing whether unsupervised
+clustering rediscovers those cultivars without labels.**
+
+Built as the final capstone for the *Virtual Data Science with Python* internship (YuvaIntern).
 
 ## Problem Statement
-Classify 8x8 grayscale images of handwritten digits (0–9) into their correct
-class using a CNN — a multi-class **classification** problem.
+Given the chemical analysis of wines grown in the same region of Italy but derived
+from three different cultivars, can we (a) **predict** the cultivar from its
+chemistry (supervised classification), and (b) does **unsupervised clustering**
+of the same chemistry naturally separate the wines into groups that agree with
+the true cultivars — i.e., is the cultivar signal strong enough to be discovered
+without labels at all?
 
 ## Dataset
-- **Name:** Optical Recognition of Handwritten Digits Dataset (UCI ML Repository)
-- **Access:** Public, bundled with scikit-learn (`sklearn.datasets.load_digits`)
-  and mirrored at https://archive.ics.uci.edu/dataset/80
-- **Size:** 1,797 samples, 8x8 pixels, pixel values 0–16, 10 balanced classes
+- **Name:** UCI Wine Recognition Dataset
+- **Access:** Public; bundled with scikit-learn (`sklearn.datasets.load_wine`),
+  original source: https://archive.ics.uci.edu/dataset/109/wine
+- **Size:** 178 samples, 13 numeric chemical features, 3 classes (cultivars)
 
-## Architecture
-```
-Input (8x8x1)
-  -> Conv2D(8 filters, 3x3) + ReLU
-  -> MaxPooling2D(2x2)
-  -> Flatten
-  -> Dense(64) + ReLU
-  -> Dropout(0.3)
-  -> Dense(10) + Softmax
-```
-See `architecture_diagram.png`.
+## Pipeline (`pipeline.py`)
+1. **Data collection** — load the public dataset (deliberately re-injected 5
+   duplicate rows + 6 missing values to demonstrate a realistic cleaning step).
+2. **Data cleaning** — de-duplication, median imputation, IQR outlier audit.
+3. **EDA** — class balance, correlation heatmap, feature boxplots by cultivar.
+4. **Modeling — supervised** — Logistic Regression and Random Forest, 5-fold
+   stratified cross-validation, held-out test evaluation.
+5. **Modeling — unsupervised** — KMeans clustering (k chosen via elbow method),
+   PCA for 2D visualization, Adjusted Rand Index against true labels.
+6. **Evaluation** — accuracy, precision/recall/F1, confusion matrix, feature
+   importance, silhouette score, ARI.
+
+## Results
+| Model | CV Accuracy | Test Accuracy |
+|---|---|---|
+| Logistic Regression | 98.3% ± 1.4% | 97.8% |
+| **Random Forest (best)** | 97.8% ± 2.1% | **100%** |
+
+- **KMeans (k=3) vs true cultivars:** Adjusted Rand Index = **0.90**, silhouette
+  score = 0.28 — the chemistry alone almost perfectly recovers the true cultivar
+  groupings without ever seeing the labels.
+- **Top predictive features:** color intensity, flavanoids, proline, alcohol.
 
 ## Files
 | File | Description |
 |---|---|
-| `cnn_tensorflow.py` | Primary deliverable — full Keras/TensorFlow implementation (run this) |
-| `cnn_numpy.py` / `train.py` | From-scratch NumPy reference implementation used to validate the architecture and generate the results in this repo/report |
-| `history.json` | Per-epoch training/validation loss & accuracy |
-| `classification_report.txt` | Precision/recall/F1 per class |
-| `*.png` | Architecture diagram, loss/accuracy curves, confusion matrix, sample predictions |
-| `Week5_DeepLearning_Report.docx` | Full project report |
+| `pipeline.py` | End-to-end pipeline: cleaning → EDA → supervised + unsupervised modeling → evaluation |
+| `wine_raw_dirty.csv` | Raw data with injected duplicates/nulls (before cleaning) |
+| `wine_clean.csv` | Cleaned dataset used for modeling |
+| `cleaning_report.txt`, `results_summary.json`, `classification_report.txt`, `feature_importances.csv` | Generated reports/metrics |
+| `eda_*.png`, `model_*.png`, `clustering_*.png` | All figures used in the report |
+| `Week6_Capstone_Report.docx` | Full capstone report |
 
-## How to run (TensorFlow version)
+## How to run
 ```bash
-pip install tensorflow scikit-learn matplotlib
-python cnn_tensorflow.py
+pip install scikit-learn pandas matplotlib seaborn
+python pipeline.py
 ```
 
-## Results (NumPy reference run, 25 epochs)
-- **Test Accuracy:** 95.83%
-- **Macro F1-score:** 0.958
-- Training time: ~11 seconds on CPU
-
 ## Key Challenges
-- Implementing convolution and max-pooling backward passes manually (no
-  autograd) required careful gradient bookkeeping.
-- With only ~1,800 samples, the model can overfit quickly — mitigated with
-  a modest architecture, a hidden layer of 64 units, and (in the Keras
-  version) dropout.
-- Small 8x8 inputs limit receptive field growth, so only a single conv/pool
-  stage was used before flattening.
+- Balancing realistic data-cleaning steps against a dataset that is already
+  fairly clean — resolved by deliberately injecting a controlled amount of
+  duplication/missingness so the cleaning stage is genuine rather than a no-op.
+- Choosing k for KMeans without label leakage — resolved with the elbow method
+  on inertia, confirming k=3 independently of the known number of cultivars.
+- Comparing "supervised-perfect" accuracy against a fair unsupervised baseline
+  — used Adjusted Rand Index (chance-corrected) rather than raw label overlap.
 
 ## Author
 Keshari — YuvaIntern Virtual Data Science with Python Trainee

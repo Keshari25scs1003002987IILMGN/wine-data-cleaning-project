@@ -1,0 +1,32 @@
+{
+  "n_samples_raw_dirty": 183,
+  "n_duplicates_removed": 5,
+  "n_missing_imputed": 6,
+  "n_samples_clean": 178,
+  "class_counts": {
+    "Cultivar B": 71,
+    "Cultivar A": 59,
+    "Cultivar C": 48
+  },
+  "supervised": {
+    "Logistic Regression": {
+      "cv_mean_accuracy": 0.9833333333333332,
+      "cv_std_accuracy": 0.013608276348795441,
+      "test_accuracy": 0.9777777777777777
+    },
+    "Random Forest": {
+      "cv_mean_accuracy": 0.9774603174603176,
+      "cv_std_accuracy": 0.021299434518521104,
+      "test_accuracy": 1.0
+    }
+  },
+  "best_model": "Random Forest",
+  "unsupervised": {
+    "silhouette_score": 0.2843306184422015,
+    "adjusted_rand_index": 0.8974949815093207,
+    "pca_explained_variance": [
+      0.3594319989540825,
+      0.1917636499165133
+    ]
+  }
+}

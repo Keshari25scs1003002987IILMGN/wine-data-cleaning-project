@@ -1,0 +1,6 @@
+Raw rows (with injected duplicates/nulls): 183
+Duplicate rows found: 5
+Missing values found: 6
+Rows after de-duplication: 178
+Missing values after median imputation: 0
+Outliers per feature (IQR method): {"alcohol": 0, "malic_acid": 3, "ash": 3, "alcalinity_of_ash": 4, "magnesium": 4, "total_phenols": 0, "flavanoids": 0, "nonflavanoid_phenols": 0, "proanthocyanins": 2, "color_intensity": 4, "hue": 1, "od280/od315_of_diluted_wines": 0, "proline": 0}
