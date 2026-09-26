@@ -1,0 +1,23 @@
+Chosen k: 3
+
+K-Means silhouette score: 0.292
+K-Means Adjusted Rand Index vs true classes: 0.916
+
+Hierarchical silhouette score: 0.284
+Hierarchical Adjusted Rand Index vs true classes: 0.863
+
+K-MEANS CLUSTER PROFILE (mean feature values):
+                alcohol  malic_acid  ...  od280/od315_of_diluted_wines  proline
+kmeans_cluster                       ...                                       
+0                 12.27        1.87  ...                           2.8   526.87
+1                 13.09        3.30  ...                           1.7   619.06
+2                 13.71        1.98  ...                           3.1  1128.65
+
+[3 rows x 13 columns]
+
+K-MEANS CLUSTERS vs TRUE WINE CLASS (crosstab):
+kmeans_cluster   0   1   2
+wine_class                
+class_0          0   0  60
+class_1         66   3   2
+class_2          0  48   0
