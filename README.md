@@ -1,48 +1,59 @@
-# Unsupervised Learning & Clustering Analysis — Wine Recognition Dataset
+# Deep Learning Application in Data Science — Week 5 Task
 
-**YuvaIntern — Virtual Data Science with Python Trainee — Week 3 Task**
+Handwritten digit classification using a Convolutional Neural Network (CNN),
+built as part of the *Virtual Data Science with Python* internship (YuvaIntern).
 
-## Objective
-Apply unsupervised learning (clustering) to a publicly available dataset, segment it into meaningful groups, and analyze each cluster's characteristics using Scikit-learn.
+## Problem Statement
+Classify 8x8 grayscale images of handwritten digits (0–9) into their correct
+class using a CNN — a multi-class **classification** problem.
 
 ## Dataset
-- **Source:** Cleaned Wine Recognition Dataset from Weeks 1-2 (179 samples, 13 chemical features, 3 known cultivars used only for post-hoc validation).
+- **Name:** Optical Recognition of Handwritten Digits Dataset (UCI ML Repository)
+- **Access:** Public, bundled with scikit-learn (`sklearn.datasets.load_digits`)
+  and mirrored at https://archive.ics.uci.edu/dataset/80
+- **Size:** 1,797 samples, 8x8 pixels, pixel values 0–16, 10 balanced classes
 
-## Project Structure
+## Architecture
 ```
-├── src/
-│   └── clustering_pipeline.py      # Full clustering pipeline
-├── data/
-│   ├── 00_input_eda_wine.csv               # Input (from Week 2)
-│   ├── 01_clustered_wine_dataset.csv       # Output with cluster labels + PCA coords
-│   ├── kmeans_cluster_profile.csv
-│   ├── kmeans_vs_true_class_crosstab.csv
-│   └── clustering_summary.txt
-├── images/                         # Elbow/silhouette plot, dendrogram, PCA cluster plots
-├── requirements.txt
-└── README.md
+Input (8x8x1)
+  -> Conv2D(8 filters, 3x3) + ReLU
+  -> MaxPooling2D(2x2)
+  -> Flatten
+  -> Dense(64) + ReLU
+  -> Dropout(0.3)
+  -> Dense(10) + Softmax
 ```
+See `architecture_diagram.png`.
 
-## Steps Performed
-1. **Preprocessing** — re-standardized features with StandardScaler for distance-based clustering.
-2. **Choosing k** — Elbow Method + Silhouette Score across k = 2 to 8; k = 3 selected.
-3. **K-Means clustering** (k=3, n_init=10, random_state=42).
-4. **Hierarchical (Agglomerative) clustering** with Ward linkage, plus a dendrogram.
-5. **Visualization** — PCA-reduced 2D scatter plots for both methods and for the true labels (for comparison only).
-6. **Evaluation** — Silhouette Score and Adjusted Rand Index (vs. true cultivar labels, held out from clustering).
-7. **Cluster profiling** — mean feature values per cluster, and a crosstab against true classes.
+## Files
+| File | Description |
+|---|---|
+| `cnn_tensorflow.py` | Primary deliverable — full Keras/TensorFlow implementation (run this) |
+| `cnn_numpy.py` / `train.py` | From-scratch NumPy reference implementation used to validate the architecture and generate the results in this repo/report |
+| `history.json` | Per-epoch training/validation loss & accuracy |
+| `classification_report.txt` | Precision/recall/F1 per class |
+| `*.png` | Architecture diagram, loss/accuracy curves, confusion matrix, sample predictions |
+| `Week5_DeepLearning_Report.docx` | Full project report |
 
-## How to Run
+## How to run (TensorFlow version)
 ```bash
-pip install -r requirements.txt
-python src/clustering_pipeline.py
+pip install tensorflow scikit-learn matplotlib
+python cnn_tensorflow.py
 ```
 
-## Key Findings
-- k = 3 is optimal by both the Elbow Method and Silhouette Score, matching the 3 known wine cultivars.
-- K-Means: Silhouette = 0.292, Adjusted Rand Index vs. true classes = 0.916.
-- Hierarchical (Ward): Silhouette = 0.284, Adjusted Rand Index vs. true classes = 0.863.
-- Clusters are clearly distinguished by flavanoids, color intensity, alcohol and proline.
+## Results (NumPy reference run, 25 epochs)
+- **Test Accuracy:** 95.83%
+- **Macro F1-score:** 0.958
+- Training time: ~11 seconds on CPU
+
+## Key Challenges
+- Implementing convolution and max-pooling backward passes manually (no
+  autograd) required careful gradient bookkeeping.
+- With only ~1,800 samples, the model can overfit quickly — mitigated with
+  a modest architecture, a hidden layer of 64 units, and (in the Keras
+  version) dropout.
+- Small 8x8 inputs limit receptive field growth, so only a single conv/pool
+  stage was used before flattening.
 
 ## Author
-Keshari — YuvaIntern Virtual Data Science with Python Trainee Program
+Keshari — YuvaIntern Virtual Data Science with Python Trainee
